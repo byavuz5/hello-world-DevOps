@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world-deployment
+  labels:
+    app: hello-world
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-world
+  template:
+    metadata:
+      labels:
+        app: hello-world
+    spec:
+      containers:
+        - name: hello-world
+          image: europe-west3-docker.pkg.dev/brave-rainfall-361406/hello-world-stage-repo/hello-world
+          resources:
+            requests:
+              memory: "125Mi"
+              cpu: "200m"
+            limits:
+              memory: "250Mi"
+              cpu: "400m"
+          ports:
+            - containerPort: 3000
+      tolerations:
+        - key: "platform"
+          operator: "Equal"
+          value: "stage"
+          effect: "NoSchedule"

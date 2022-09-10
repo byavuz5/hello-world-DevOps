@@ -1,0 +1,30 @@
+steps:
+  # Docker Build
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "-t",
+        "${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/${_IMAGE}",
+        ".",
+      ]
+
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "push",
+        "${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/${_IMAGE}",
+      ]
+
+  - name: "gcr.io/cloud-builders/gke-deploy"
+    args:
+      - run
+      - -n
+      - stage
+      - --filename=k8s-deployment/stage/stage-deployment.yaml
+      - -i
+      - ${_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${_REPOSITORY}/${_IMAGE}
+      - --location=${_LOCATION_CLUSTER}
+      - --cluster=${_CLUSTER}
+options:
+  logging: CLOUD_LOGGING_ONLY

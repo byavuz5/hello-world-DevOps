@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: stage-cert
+  namespace: stage
+spec:
+  dnsNames:
+    - stage.basicproject.dev
+  secretName: stage-cert-tls
+  issuerRef:
+    name: stage-cluster-issuer
+    kind: ClusterIssuer

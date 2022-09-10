@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: production-cert
+  namespace: production
+spec:
+  dnsNames:
+    - prod.basicproject.dev
+  secretName: production-cert-tls
+  issuerRef:
+    name: production-cluster-issuer
+    kind: ClusterIssuer

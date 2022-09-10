@@ -1,0 +1,45 @@
+apiVersion: cloud-build-notifiers/v1
+kind: SMTPNotifier
+metadata:
+  name: example-smtp-notifier
+spec:
+  notification:
+    filter: build.status in [Build.Status.SUCCESS, Build.Status.FAILURE, Build.Status.TIMEOUT]
+    params:
+      buildStatus: $(build.status)
+    template:
+      type: golang
+      content: |
+        <html>
+          <body>
+          <table>
+            <tbody>
+              <tr>
+                  <td>Build Name</td>
+                  <td>{{.Build.Name}}</td>
+              </tr>
+              <tr>
+                  <td>Build Status</td>
+                  <td>{{.Build.Status}}</td>
+              </tr>
+              <tr>
+                  <td>Build Log</td>
+                  <td>{{.Build.LogUrl}}</td>
+              </tr>
+            
+            </tbody>
+          </table>
+          </body>
+        </html>
+    delivery:
+      server: smtp.gmail.com
+      port: "587"
+      sender: berkyavuz96@gmail.com
+      from: berkyavuz96@gmail.com
+      recipients:
+        - beconberlin5@gmail.com
+      password:
+        secretRef: smtp-password
+  secrets:
+    - name: smtp-password
+      value: projects/299772591520/secrets/email-pass/versions/4

@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: production-ingress
+  namespace: production
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  tls:
+    - hosts:
+        - prod.basicproject.dev
+      secretName: production-cert-tls
+
+  rules:
+    - host: prod.basicproject.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: hello-world-service
+                port:
+                  number: 80

@@ -1,0 +1,20 @@
+version: 2.1
+jobs:
+  test:
+    docker:
+      - image: cimg/node:18.8
+    steps:
+      - checkout
+      - run:
+          name: Dependency'lerin kurulmasi
+          command: yarn
+      - run:
+          name: Lint kurallari kontrol
+          command: yarn lint
+      - run:
+          name: Formatlama kurallari kontrol
+          command: yarn format:check
+workflows:
+  test:
+    jobs:
+      - test
